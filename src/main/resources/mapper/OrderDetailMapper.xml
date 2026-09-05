@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.shop.mapper.OrderDetailMapper">
+
+    <!-- 新增訂單明細 -->
+    <insert id="insert"
+            statementType="CALLABLE">
+
+        CALL add_order_detail(
+            #{orderId},
+            #{productId},
+            #{quantity},
+            #{standPrice}
+        )
+     </insert>
+
+    <!-- 查詢訂單明細 -->
+    <select id="findByOrderId"
+            resultType="com.example.shop.entity.OrderDetail">
+
+        SELECT
+            OrderItemSN,
+            OrderID,
+            ProductID,
+            Quantity,
+            StandPrice,
+            ItemPrice
+        FROM "OrderDetail"
+        WHERE OrderID = #{orderId}
+        ORDER BY OrderItemSN ASC;
+
+    </select>
+
+</mapper>
