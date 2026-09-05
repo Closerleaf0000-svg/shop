@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.shop.mapper.OrderMapper">
+
+    <!-- 建立訂單 -->
+    <insert id="insert"
+            statementType="CALLABLE">
+
+        CALL create_order(
+            #{orderId},
+            #{memberId},
+            #{price},
+            #{payStatus}
+        )
+
+    </insert>
+
+
+    <!-- 查詢單筆訂單 -->
+    <select id="findByOrderId"
+            resultType="com.example.shop.entity.Order">
+
+        SELECT
+            OrderID,
+            MemberID,
+            Price,
+            PayStatus
+        FROM "Order"
+        WHERE OrderID = #{orderId}
+
+    </select>
+
+
+    <!-- 管理者：查詢所有訂單 -->
+    <select id="findAll"
+            resultType="com.example.shop.entity.Order">
+
+        SELECT
+            OrderID,
+            MemberID,
+            Price,
+            PayStatus
+        FROM "Order"
+        ORDER BY OrderID DESC
+
+    </select>
+
+</mapper>
