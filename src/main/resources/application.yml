@@ -1,0 +1,79 @@
+# ==========================================
+# 基礎設定
+# ==========================================
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: shop
+
+  profiles:
+    active: dev
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/shop_db
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: Fr1597530
+
+
+# ==========================================
+# MyBatis
+# ==========================================
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.shop.entity
+
+  configuration:
+    map-underscore-to-camel-case: true
+
+
+---
+# ==========================================
+# 開發環境
+# ==========================================
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/shop_db
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: Fr1597530
+
+server:
+  port: 8080
+
+logging:
+  level:
+    com.example.shop: DEBUG
+
+
+---
+# ==========================================
+# 正式環境
+# ==========================================
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/shop_db
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: Fr1597530
+
+server:
+  port: 8888
+
+logging:
+  level:
+    com.example.shop: INFO
