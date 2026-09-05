@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.shop.mapper.CartMapper">
+
+    <!-- 新增商品至購物車 -->
+    <insert id="insert"
+            statementType="CALLABLE">
+
+        CALL add_to_cart(
+            #{memberId},
+            #{productId},
+            #{quantity}
+        )
+
+    </insert>
+
+
+    <!-- 查詢指定會員的購物車內容 -->
+    <!-- 同時取得商品名稱、價格、目前庫存 -->
+    <select id="findByMemberId"
+            resultType="com.example.shop.entity.Cart">
+
+        SELECT
+            c.CartID,
+            c.MemberID,
+            c.ProductID,
+            p.ProductName AS productName,
+            p.Price AS price,
+            p.Quantity AS stock,
+            c.Quantity AS quantity
+        FROM "Cart" c
+
+        JOIN "Product" p
+            ON c.ProductID = p.ProductID
+
+        WHERE c.MemberID = #{memberId}
+
+        ORDER BY c.ProductID ASC
+
+    </select>
+
+
+    <!-- 查詢會員購物車中是否已經有指定商品 -->
+    <select id="findByMemberIdAndProductId"
+            resultType="com.example.shop.entity.Cart">
+
+        SELECT
+            CartID,
+            MemberID,
+            ProductID,
+            Quantity
+        FROM "Cart"
+        WHERE MemberID = #{memberId}
+          AND ProductID = #{productId}
+
+    </select>
+
+
+    <!-- 修改指定商品的購買數量 -->
+    <update id="updateQuantity"
+            statementType="CALLABLE">
+
+        CALL update_cart_quantity(
+            #{memberId},
+            #{productId},
+            #{quantity}
+        )
+
+    </update>
+
+
+    <!-- 商品數量 +1 -->
+    <update id="increaseQuantity"
+            statementType="CALLABLE">
+
+        CALL increase_cart_quantity(
+            #{memberId},
+            #{productId}
+        )
+
+    </update>
+
+
+    <!-- 商品數量 -1 -->
+    <update id="decreaseQuantity"
+            statementType="CALLABLE">
+
+        CALL decrease_cart_quantity(
+            #{memberId},
+            #{productId}
+        )
+
+    </update>
+
+
+    <!-- 從購物車移除 -->
+    <delete id="deleteCartItem"
+            statementType="CALLABLE">
+
+        CALL delete_cart_item(
+            #{memberId},
+            #{productId}
+        )
+
+    </delete>
+
+</mapper>
