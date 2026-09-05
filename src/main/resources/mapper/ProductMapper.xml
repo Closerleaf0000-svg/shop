@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.shop.mapper.ProductMapper">
+
+    <!-- 新增商品 -->
+    <insert id="addProduct"
+            statementType="CALLABLE">
+        CALL add_product(
+            #{productId},
+            #{productName},
+            #{price},
+            #{quantity}
+        )
+    </insert>
+
+
+    <!-- 查詢所有有庫存的商品 -->
+    <select id="findAll"
+            resultType="com.example.shop.entity.Product">
+
+        SELECT
+            ProductID,
+            ProductName,
+            Price,
+            Quantity
+        FROM "Product"
+        WHERE Quantity > 0
+        ORDER BY ProductID
+
+    </select>
+
+
+    <!-- 商品名稱搜尋 -->
+    <select id="search"
+            resultType="com.example.shop.entity.Product">
+
+        SELECT
+            ProductID,
+            ProductName,
+            Price,
+            Quantity
+        FROM "Product"
+        WHERE Quantity > 0
+          AND ProductName ILIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY ProductID
+
+    </select>
+
+
+    <!-- 查詢單一商品 -->
+    <select id="findByProductId"
+            resultType="com.example.shop.entity.Product">
+
+        SELECT
+            ProductID,
+            ProductName,
+            Price,
+            Quantity
+        FROM "Product"
+        WHERE ProductID = #{productId}
+
+    </select>
+
+
+    <!-- 扣除商品庫存 -->
+    <update id="decreaseQuantity"
+            statementType="CALLABLE">
+        CALL decrease_product_quantity(
+            #{productId},
+            #{quantity}
+        )
+    </update>
+
+</mapper>
